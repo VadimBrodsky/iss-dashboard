@@ -19811,36 +19811,49 @@ module.exports = require('./lib/React');
 },{"./lib/React":"/Users/vadimbrodsky/git/clearpath-sample/node_modules/react/lib/React.js"}],"/Users/vadimbrodsky/git/clearpath-sample/src/app.jsx":[function(require,module,exports){
 var React = require('react');
 var Counter = require('./counter');
-
+var Chart = require('./chart');
 var apiEndPoint = 'https://api.wheretheiss.at/v1/satellites/25544';
 
-// var ajax_call = function() {
-//   $.ajax({
-//      type: "GET",
-//      dataType: "json",
-//      url: apiEndPoint,
-//      async: false,
-//      success: function(data){
-//         console.log(data);
-//      }
-//   });
-// }
-//
-// var interval = 1000 * 2;
-// setInterval(ajax_call, interval);
-
+var altitude = React.createElement(Counter, {param: "altitude", label: "Kilometers", interval:'2000'});
+var velocity = React.createElement(Counter, {param: "velocity", label: "KM/H", interval:'2000'});
 
 var App = React.createClass({displayName: "App",
-  updateData: function() {
-
-  },
   render: function() {
-    return React.createElement(Counter, {param: "altitude", label: "miles"})
+    return React.createElement("div", {className: "row"}, 
+      React.createElement("div", {className: "col-sm-6 col-md-4"}, 
+        React.createElement(Chart, {title: "Altitude", caption: "ISS Live Altitude above sea level", widget: altitude})
+      ), 
+      React.createElement("div", {className: "col-sm-6 col-md-4"}, 
+        React.createElement(Chart, {title: "Velocity", caption: "The Velocity of the ISS", widget: velocity})
+      ), 
+      React.createElement("div", {className: "col-sm-6 col-md-4"}, 
+        React.createElement(Chart, {title: "Visibility", caption: "The ISS is currently in visibility region"})
+      )
+    )
   }
 });
+var app = React.createElement(App, {});
+React.render(app, document.querySelector('#react'));
 
-var counter = React.createElement(App);
-React.render(counter, document.querySelector('#altitude'));
+},{"./chart":"/Users/vadimbrodsky/git/clearpath-sample/src/chart.jsx","./counter":"/Users/vadimbrodsky/git/clearpath-sample/src/counter.jsx","react":"/Users/vadimbrodsky/git/clearpath-sample/node_modules/react/react.js"}],"/Users/vadimbrodsky/git/clearpath-sample/src/chart.jsx":[function(require,module,exports){
+var React = require('react');
+var Counter = require('./counter');
+
+module.exports = React.createClass({displayName: "exports",
+  render: function() {
+    return React.createElement("div", {className: "chart-wrapper"}, 
+      React.createElement("div", {className: "chart-title text-center"}, 
+        this.props.title
+      ), 
+      React.createElement("div", {className: "chart-stage ", id: "altitude"}, 
+      this.props.widget
+      ), 
+      React.createElement("div", {className: "chart-notes text-center"}, 
+        this.props.caption
+      )
+    )
+  }
+});
 
 },{"./counter":"/Users/vadimbrodsky/git/clearpath-sample/src/counter.jsx","react":"/Users/vadimbrodsky/git/clearpath-sample/node_modules/react/react.js"}],"/Users/vadimbrodsky/git/clearpath-sample/src/counter.jsx":[function(require,module,exports){
 var React = require('react');
@@ -19855,7 +19868,7 @@ module.exports = React.createClass({displayName: "exports",
   componentDidMount: function() {
     setInterval(function() {
       this.fetchISSData();
-    }.bind(this), 2000);
+    }.bind(this), this.props.interval);
   },
   fetchISSData :function () {
     $.ajax({
@@ -19863,10 +19876,10 @@ module.exports = React.createClass({displayName: "exports",
        dataType: 'json',
        data: { format: 'json' },
        success: function (result) {
-         this.setState({ data: result[this.props.param] });
+         this.setState({ data: result[this.props.param].toFixed(3) });
        }.bind(this),
        error: function () {
-         alert('error getting ISS data. please try again later');
+         console.log('error getting ISS data. please try again later');
        }
     });
   },

@@ -10,7 +10,7 @@ module.exports = React.createClass({
   componentDidMount: function() {
     setInterval(function() {
       this.fetchISSData();
-    }.bind(this), 2000);
+    }.bind(this), this.props.interval);
   },
   fetchISSData :function () {
     $.ajax({
@@ -18,10 +18,10 @@ module.exports = React.createClass({
        dataType: 'json',
        data: { format: 'json' },
        success: function (result) {
-         this.setState({ data: result[this.props.param] });
+         this.setState({ data: result[this.props.param].toFixed(3) });
        }.bind(this),
        error: function () {
-         alert('error getting ISS data. please try again later');
+         console.log('error getting ISS data. please try again later');
        }
     });
   },

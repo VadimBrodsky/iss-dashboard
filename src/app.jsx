@@ -1,32 +1,25 @@
 var React = require('react');
 var Counter = require('./counter');
-
+var Chart = require('./chart');
 var apiEndPoint = 'https://api.wheretheiss.at/v1/satellites/25544';
 
-// var ajax_call = function() {
-//   $.ajax({
-//      type: "GET",
-//      dataType: "json",
-//      url: apiEndPoint,
-//      async: false,
-//      success: function(data){
-//         console.log(data);
-//      }
-//   });
-// }
-//
-// var interval = 1000 * 2;
-// setInterval(ajax_call, interval);
-
+var altitude = React.createElement(Counter, {param: "altitude", label: "Kilometers", interval:'2000'});
+var velocity = React.createElement(Counter, {param: "velocity", label: "KM/H", interval:'2000'});
 
 var App = React.createClass({
-  updateData: function() {
-
-  },
   render: function() {
-    return <Counter param="altitude" label="miles"/>
+    return <div className='row'>
+      <div className="col-sm-6 col-md-4">
+        <Chart title="Altitude" caption="ISS Live Altitude above sea level" widget={altitude} />
+      </div>
+      <div className="col-sm-6 col-md-4">
+        <Chart title="Velocity" caption="The Velocity of the ISS" widget={velocity} />
+      </div>
+      <div className="col-sm-6 col-md-4">
+        <Chart title="Visibility" caption="The ISS is currently in visibility region" />
+      </div>
+    </div>
   }
 });
-
-var counter = React.createElement(App);
-React.render(counter, document.querySelector('#altitude'));
+var app = React.createElement(App, {});
+React.render(app, document.querySelector('#react'));

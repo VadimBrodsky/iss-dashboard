@@ -1,0 +1,15 @@
+{
+  "name": "clearpath-sample",
+  "version": "0.0.0",
+  "authors": [
+    "Vadim Brodsky <vadimb@crankworks.ca>"
+  ],
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "~3.3.5",
+    "keen-dashboards": "*"
+  }
+}
